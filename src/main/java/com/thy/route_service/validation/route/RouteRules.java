@@ -15,75 +15,48 @@ public class RouteRules {
     private static final int MAX_STEPS = 3;
 
     public void validateSearchInput(Long originId, Long destinationId) {
-        if (originId == null || destinationId == null) {
+        if (originId == null || destinationId == null)
             throw new BusinessRuleException("originId and destinationId are required.");
-        }
-        if (originId.equals(destinationId)) {
+        if (originId.equals(destinationId))
             throw new BusinessRuleException("originId and destinationId cannot be the same.");
-        }
     }
 
-    public boolean canAddStep(List<Transportation> currentPath,
-                              Transportation next,
-                              LocalDate date) {
+    public boolean canAddStep(List<Transportation> path, Transportation next, LocalDate date) {
 
-        // depth limit
-        if (currentPath.size() >= MAX_STEPS) return false;
+        if (path.size() >= MAX_STEPS) return false;
 
-        // 연결 kuralı
-        if (!currentPath.isEmpty()) {
-            Transportation last = currentPath.get(currentPath.size() - 1);
-            if (!last.getDestination().getId()
-                    .equals(next.getOrigin().getId())) {
-                return false;
-            }
+        if (!path.isEmpty()) {
+            Transportation last = path.get(path.size() - 1);
+            if (!last.getDestination().getId().equals(next.getOrigin().getId())) return false;
         }
 
-        // 날짜 filtresi
-        if (date != null && !matchesOperatingDays(next.getOperatingDays(), date)) {
-            return false;
-        }
+        if (date != null && !matchesOperatingDays(next.getOperatingDays(), date)) return false;
 
-        // exactly one FLIGHT, before/after max 1
-        int flightCount = 0;
+        int flights = 0;
         boolean flightSeen = false;
-        int before = 0;
-        int after = 0;
+        int before = 0, after = 0;
 
-        for (Transportation t : currentPath) {
+        for (Transportation t : path) {
             if (t.getType() == TransportationType.FLIGHT) {
-                flightCount++;
+                flights++;
                 flightSeen = true;
             } else {
-                if (!flightSeen) before++;
-                else after++;
+                if (!flightSeen) before++; else after++;
             }
         }
 
-        if (next.getType() == TransportationType.FLIGHT) {
-            flightCount++;
-        } else {
-            if (!flightSeen) before++;
-            else after++;
-        }
+        if (next.getType() == TransportationType.FLIGHT) flights++;
+        else { if (!flightSeen) before++; else after++; }
 
-        return flightCount <= 1 && before <= 1 && after <= 1;
+        return flights <= 1 && before <= 1 && after <= 1;
     }
 
     public boolean isCompleteValidRoute(List<Transportation> path) {
-        long flights =
-                path.stream()
-                        .filter(t -> t.getType() == TransportationType.FLIGHT)
-                        .count();
-        return flights == 1;
+        return path.stream().filter(t -> t.getType() == TransportationType.FLIGHT).count() == 1;
     }
 
-    private boolean matchesOperatingDays(Set<Integer> days,
-                                         LocalDate date) {
-
+    private boolean matchesOperatingDays(Set<Integer> days, LocalDate date) {
         if (days == null || days.isEmpty()) return true;
-
-        int day = date.getDayOfWeek().getValue();
-        return days.contains(day);
+        return days.contains(date.getDayOfWeek().getValue());
     }
 }
