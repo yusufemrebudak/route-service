@@ -1,7 +1,9 @@
 package com.thy.route_service.validation.transportation;
 
 
+import com.thy.route_service.entity.enums.TransportationType;
 import com.thy.route_service.exception.BusinessRuleException;
+import com.thy.route_service.exception.ConflictException;
 import com.thy.route_service.exception.NotFoundException;
 import com.thy.route_service.repository.LocationRepository;
 import com.thy.route_service.repository.TransportationRepository;
@@ -49,9 +51,25 @@ public class TransportationRules {
             }
         }
     }
+
     public void checkAvaliableTransportation(Long id) {
-        if (id != null && ( transportationRepository.existsByOriginIdOrDestinationId(id) )) {
+        if (id != null && (transportationRepository.existsByOriginIdOrDestinationId(id))) {
             throw new BusinessRuleException("This location cannot be deleted, because of the avaliable transportations.");
         }
+    }
+
+    public void checkExistsOriginAndDestinationAndTypeForUpdate(Long id, Long originId, Long destinationId, TransportationType type) {
+        transportationRepository.findByOriginIdAndDestinationIdAndType(originId, destinationId,type).filter(
+                existing-> !existing.getId().equals(id)
+        ).ifPresent(existing->{
+            throw new ConflictException("This cannot be updated, because there is already a transportation with the same origin and destination.");
+        });
+
+    }
+    public void checkExistsOriginAndDestinationAndTypeForCreate(Long originId, Long destinationId, TransportationType type) {
+        transportationRepository.findByOriginIdAndDestinationIdAndType(originId, destinationId,type).ifPresent(existing->{
+            throw new ConflictException("This cannot be created, because there is already a transportation with the same origin and destination.");
+        });
+
     }
 }

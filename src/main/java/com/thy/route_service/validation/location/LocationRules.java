@@ -27,7 +27,7 @@ public class LocationRules {
     }
     public void checkNameAndCityUnique(String name,String city) {
         if (locationRepository.existsByNameAndCity(name, city)) {
-            throw new ConflictException("Location name and city already exists: " + name + ", " + city);
+            throw new ConflictException("Location name / city already exists: " + name + ", " + city);
         }
     }
 

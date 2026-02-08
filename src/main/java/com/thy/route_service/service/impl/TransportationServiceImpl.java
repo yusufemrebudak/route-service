@@ -40,8 +40,8 @@ public class TransportationServiceImpl implements TransportationService {
         transportationRules.checkOriginDestinationDifferent(request.originId(), request.destinationId());
         transportationRules.checkLocationsExist(request.originId(), request.destinationId());
         transportationRules.checkOperatingDays(request.operatingDays());
+        transportationRules.checkExistsOriginAndDestinationAndTypeForCreate(request.originId(),request.destinationId(),TransportationType.valueOf(request.type()));
 
-        // checkOriginAndDestinationIdAndTypeNotexist
 
         Location origin = loadLocation(request.originId(), "Origin");
         Location destination = loadLocation(request.destinationId(), "Destination");
@@ -71,15 +71,19 @@ public class TransportationServiceImpl implements TransportationService {
         transportationRules.checkOriginDestinationDifferent(originId, destinationId);
         transportationRules.checkLocationsExist(originId, destinationId);
 
-        // checkOriginAndDestinationIdAndTypeNotexist
+        TransportationType type;
+        if (request.type() != null && !request.type().isBlank()) {
+            type = parseType(request.type());
+        }else{
+            type=t.getType();
+        }
+        transportationRules.checkExistsOriginAndDestinationAndTypeForUpdate(id, originId, destinationId , type);
+
 
         Location origin = request.originId() != null ? loadLocation(request.originId(), "Origin") : null;
         Location destination = request.destinationId() != null ? loadLocation(request.destinationId(), "Destination") : null;
 
-        TransportationType type = null;
-        if (request.type() != null && !request.type().isBlank()) {
-            type = parseType(request.type());
-        }
+
 
         if (request.operatingDays() != null) {
             transportationRules.checkOperatingDays(request.operatingDays());

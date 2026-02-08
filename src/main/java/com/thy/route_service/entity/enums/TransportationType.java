@@ -5,5 +5,6 @@ public enum TransportationType {
     FLIGHT,
     BUS,
     SUBWAY,
-    UBER
+    UBER,
+    HELICOPTER
 }
