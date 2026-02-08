@@ -10,6 +10,7 @@ import com.thy.route_service.mapper.LocationMapper;
 import com.thy.route_service.repository.LocationRepository;
 import com.thy.route_service.service.LocationService;
 import com.thy.route_service.validation.location.LocationRules;
+import com.thy.route_service.validation.transportation.TransportationRules;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,11 +25,14 @@ public class LocationServiceImpl implements LocationService {
     private final LocationRepository locationRepository;
     private final LocationRules locationRules;
     private final LocationMapper locationMapper;
+    private final TransportationRules transportationRules;
+
 
     @Override
     public LocationResponse create(LocationCreateRequest request) {
         String code = locationRules.resolveLocationCode(request.locationCode(), request.name());
         locationRules.checkLocationCodeUnique(code);
+        locationRules.checkNameAndCityUnique(request.name(), request.city());
 
         Location entity = locationMapper.toEntity(request, code);
         Location saved = locationRepository.save(entity);
@@ -47,6 +51,7 @@ public class LocationServiceImpl implements LocationService {
             locationRules.checkLocationCodeUniqueForUpdate(id, newCode);
             location.setLocationCode(newCode);
         }
+        locationRules.checkNameAndCityUniqueForUpdate(id,request.name(),request.city());
 
         // diğer alanlar
         locationMapper.applyUpdate(request, location);
@@ -74,6 +79,7 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public void delete(Long id) {
         locationRules.checkLocationExists(id);
+        transportationRules.checkAvaliableTransportation(id);
         locationRepository.deleteById(id);
     }
 }

@@ -25,6 +25,11 @@ public class LocationRules {
             throw new ConflictException("Location code already exists: " + code);
         }
     }
+    public void checkNameAndCityUnique(String name,String city) {
+        if (locationRepository.existsByNameAndCity(name, city)) {
+            throw new ConflictException("Location name and city already exists: " + name + ", " + city);
+        }
+    }
 
     public void checkLocationCodeUniqueForUpdate(Long id, String newCode) {
         locationRepository.findByLocationCode(newCode)
@@ -32,6 +37,11 @@ public class LocationRules {
                 .ifPresent(existing -> {
                     throw new ConflictException("Location code already exists: " + newCode);
                 });
+    }
+    public void checkNameAndCityUniqueForUpdate(Long id, String name, String city) {
+        locationRepository.findByNameAndCity(name,city).filter(existing-> !existing.getId().equals(id)).ifPresent(existing-> {
+            throw new ConflictException("Name and city already exist " + name + " ," + city);
+        });
     }
 
     /**

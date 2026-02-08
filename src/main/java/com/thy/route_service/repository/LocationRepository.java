@@ -9,5 +9,9 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
 
     Optional<Location> findByLocationCode(String locationCode);
 
+    Optional<Location> findByNameAndCity(String name, String city);
     boolean existsByLocationCode(String locationCode);
+
+    boolean existsByNameAndCity(String name, String city);
+
 }

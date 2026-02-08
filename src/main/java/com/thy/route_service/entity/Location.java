@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class Location extends BaseEntity{
 
 
+
     @Column(nullable = false, length = 100)
     private String name;
 

@@ -4,6 +4,7 @@ package com.thy.route_service.controller;
 import com.thy.route_service.dto.transportation.request.TransportationCreateRequest;
 import com.thy.route_service.dto.transportation.request.TransportationUpdateRequest;
 import com.thy.route_service.dto.transportation.response.TransportationResponse;
+import com.thy.route_service.dto.transportation.response.TransportationTypeResponse;
 import com.thy.route_service.service.TransportationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -46,5 +47,9 @@ public class TransportationController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         transportationService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/types")
+    public ResponseEntity<List<TransportationTypeResponse>> listTypes() {
+        return ResponseEntity.ok(transportationService.getAllTypes());
     }
 }

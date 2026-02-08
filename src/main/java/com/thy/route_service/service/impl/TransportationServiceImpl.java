@@ -3,6 +3,7 @@ package com.thy.route_service.service.impl;
 import com.thy.route_service.dto.transportation.request.TransportationCreateRequest;
 import com.thy.route_service.dto.transportation.request.TransportationUpdateRequest;
 import com.thy.route_service.dto.transportation.response.TransportationResponse;
+import com.thy.route_service.dto.transportation.response.TransportationTypeResponse;
 import com.thy.route_service.entity.Location;
 import com.thy.route_service.entity.Transportation;
 import com.thy.route_service.entity.enums.TransportationType;
@@ -17,7 +18,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +40,8 @@ public class TransportationServiceImpl implements TransportationService {
         transportationRules.checkOriginDestinationDifferent(request.originId(), request.destinationId());
         transportationRules.checkLocationsExist(request.originId(), request.destinationId());
         transportationRules.checkOperatingDays(request.operatingDays());
+
+        // checkOriginAndDestinationIdAndTypeNotexist
 
         Location origin = loadLocation(request.originId(), "Origin");
         Location destination = loadLocation(request.destinationId(), "Destination");
@@ -63,6 +70,8 @@ public class TransportationServiceImpl implements TransportationService {
 
         transportationRules.checkOriginDestinationDifferent(originId, destinationId);
         transportationRules.checkLocationsExist(originId, destinationId);
+
+        // checkOriginAndDestinationIdAndTypeNotexist
 
         Location origin = request.originId() != null ? loadLocation(request.originId(), "Origin") : null;
         Location destination = request.destinationId() != null ? loadLocation(request.destinationId(), "Destination") : null;
@@ -125,5 +134,13 @@ public class TransportationServiceImpl implements TransportationService {
         } catch (IllegalArgumentException ex) {
             throw new BusinessRuleException("Invalid transportation type: " + raw);
         }
+    }
+
+    @Override
+    public List<TransportationTypeResponse> getAllTypes() {
+        return Arrays.stream(TransportationType.values()).map(
+                transportationType -> new TransportationTypeResponse(transportationType.name())
+        ).toList();
+
     }
 }

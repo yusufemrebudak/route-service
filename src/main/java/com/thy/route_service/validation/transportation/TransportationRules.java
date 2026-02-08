@@ -49,4 +49,9 @@ public class TransportationRules {
             }
         }
     }
+    public void checkAvaliableTransportation(Long id) {
+        if (id != null && ( transportationRepository.existsByOriginIdOrDestinationId(id) )) {
+            throw new BusinessRuleException("This location cannot be deleted, because of the avaliable transportations.");
+        }
+    }
 }
