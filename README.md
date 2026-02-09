@@ -11,3 +11,14 @@ It provides CRUD operations for locations and transportation links, route-findin
 - Spring Data JPA / Hibernate
 - PostgreSQL
 - Swagger / OpenAPI
+
+* Core Features
+  - Location CRUD operations
+  - Transportation management between locations
+  - Route discovery logic
+  - Business rules layer
+  - DTO + Mapper architecture
+  - Global exception handling
+  - Enum-based transportation types
+  - Database-level constraints and validation
+  - Swagger / OpenAPI documentation
