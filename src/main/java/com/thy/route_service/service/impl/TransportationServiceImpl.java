@@ -84,7 +84,6 @@ public class TransportationServiceImpl implements TransportationService {
         Location destination = request.destinationId() != null ? loadLocation(request.destinationId(), "Destination") : null;
 
 
-
         if (request.operatingDays() != null) {
             transportationRules.checkOperatingDays(request.operatingDays());
         }
@@ -115,6 +114,7 @@ public class TransportationServiceImpl implements TransportationService {
         return transportationRepository.findAllWithLocations()
                 .stream()
                 .map(transportationMapper::toResponse)
+                .sorted((t1, t2) -> t1.origin().name().compareToIgnoreCase(t2.origin().name()))
                 .toList();
     }
 
@@ -142,9 +142,9 @@ public class TransportationServiceImpl implements TransportationService {
 
     @Override
     public List<TransportationTypeResponse> getAllTypes() {
-        return Arrays.stream(TransportationType.values()).map(
-                transportationType -> new TransportationTypeResponse(transportationType.name())
-        ).toList();
-
+        return Arrays.stream(TransportationType.values())
+                .map(transportationType -> new TransportationTypeResponse(transportationType.name()))
+                .sorted((t1, t2) -> t1.code().compareToIgnoreCase(t2.code()))
+                .toList();
     }
 }

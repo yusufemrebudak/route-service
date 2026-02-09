@@ -5,6 +5,7 @@ import com.thy.route_service.dto.location.request.LocationCreateRequest;
 import com.thy.route_service.dto.location.request.LocationUpdateRequest;
 import com.thy.route_service.dto.location.response.LocationResponse;
 import com.thy.route_service.entity.Location;
+import com.thy.route_service.exception.ConflictException;
 import com.thy.route_service.exception.NotFoundException;
 import com.thy.route_service.mapper.LocationMapper;
 import com.thy.route_service.repository.LocationRepository;
@@ -15,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 @Service
@@ -62,6 +65,7 @@ public class LocationServiceImpl implements LocationService {
     @Override
     @Transactional(readOnly = true)
     public LocationResponse getById(Long id) {
+
         Location l = locationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Location not found: " + id));
         return locationMapper.toResponse(l);
@@ -73,6 +77,7 @@ public class LocationServiceImpl implements LocationService {
         return locationRepository.findAll()
                 .stream()
                 .map(locationMapper::toResponse)
+                .sorted((l1, l2) -> l1.name().compareToIgnoreCase(l2.name()))
                 .toList();
     }
 

@@ -42,7 +42,7 @@ public class TransportationRules {
 
     public void checkOperatingDays(Set<Integer> operatingDays) {
         if (operatingDays == null || operatingDays.isEmpty()) {
-            // boş ise "her gün çalışıyor" kabul edeceğiz (bonus route filtresi bunu böyle yorumlayacak)
+            // boş ise "her gün çalışıyor" kabul edeceğiz
             return;
         }
         for (Integer day : operatingDays) {
