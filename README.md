@@ -27,6 +27,7 @@ It provides CRUD operations for locations and transportation links, route-findin
 
 // SQL Script to initialize the database with sample data
 -- =========================
+
 INSERT INTO locations
 (name, city, country, location_code, created_at, updated_at, version)
 VALUES
@@ -54,6 +55,7 @@ VALUES
 ((SELECT tak FROM l), (SELECT ist FROM l), 'UBER',   now(), now(), 0),
 ((SELECT ist FROM l), (SELECT esb FROM l), 'FLIGHT', now(), now(), 0),
 ((SELECT esb FROM l), (SELECT kiz FROM l), 'BUS',    now(), now(), 0),
+((SELECT esb FROM l), (SELECT kiz FROM l), 'SUBWAY', now(), now(), 0),
 ((SELECT tak FROM l), (SELECT saw FROM l), 'SUBWAY', now(), now(), 0),
 ((SELECT saw FROM l), (SELECT esb FROM l), 'FLIGHT', now(), now(), 0);
 
