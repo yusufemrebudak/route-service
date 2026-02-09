@@ -4,7 +4,7 @@ This project is a Spring Boot–based backend system for managing aviation and m
 
 It provides CRUD operations for locations and transportation links, route-finding logic, and business rule validations, exposed via RESTful APIs.
 
--> The aim of this project is to build a backend system for the aviation domain that models transportation networks between locations and calculates all possible routes from a given origin to a destination. The system is designed to help users discover optimal travel options by combining different transportation types while ensuring data consistency and business rule validation.
+- The aim of this project is to build a backend system for the aviation domain that models transportation networks between locations and calculates all possible routes from a given origin to a destination. The system is designed to help users discover optimal travel options by combining different transportation types while ensuring data consistency and business rule validation.
 
 * Tech Stack
   - Java
