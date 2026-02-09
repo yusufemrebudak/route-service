@@ -20,9 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +30,6 @@ public class TransportationServiceImpl implements TransportationService {
     private final LocationRepository locationRepository;
     private final TransportationRules transportationRules;
     private final TransportationMapper transportationMapper;
-
     @Override
     public TransportationResponse create(TransportationCreateRequest request) {
 
@@ -95,7 +91,6 @@ public class TransportationServiceImpl implements TransportationService {
                 type,
                 request.operatingDays()
         );
-
         return transportationMapper.toResponse(t);
     }
 

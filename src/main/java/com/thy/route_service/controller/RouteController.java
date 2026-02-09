@@ -1,6 +1,7 @@
 package com.thy.route_service.controller;
 
 import com.thy.route_service.dto.route.RouteResponse;
+
 import com.thy.route_service.service.RouteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -8,10 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.*;
 
 @RestController
-@RequestMapping("/routes")
+@RequestMapping("api/v1/routes")
 @RequiredArgsConstructor
 public class RouteController {
 

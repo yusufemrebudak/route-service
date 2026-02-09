@@ -44,10 +44,6 @@ public class LocationRules {
         });
     }
 
-    /**
-     * If user provided locationCode => normalize (trim + uppercase).
-     * If not provided => generate acronym from name (e.g., "Istanbul City Center" -> "ICC").
-     */
     public String resolveLocationCode(String providedCode, String name) {
 
         if (providedCode != null && !providedCode.isBlank()) {
